@@ -1,7 +1,7 @@
 pipeline:
   docker:
     image: plugins/docker
-    repo: DOCKER_REPO
+    repo: $DOCKER_REPO
     tags: latest
     secrets: [ docker_username, docker_password, docker_email, docker_repo ]
     when:
