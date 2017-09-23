@@ -3,6 +3,6 @@ pipeline:
     image: plugins/docker
     repo: aliakseimaniuk/docker-dotnet-matlab
     tags: latest
-    secrets: [ docker_username, docker_password, docker_email, docker_repo ]
+    secrets: [ docker_username, docker_password, docker_email ]
     when:
       branch: ["master"]
