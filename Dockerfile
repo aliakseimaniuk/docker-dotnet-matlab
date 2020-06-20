@@ -1,27 +1,27 @@
-#Creates docker container with dotnet runtime and Matlab Runtime(R2016b)
-
+# Builds docker container with dotnet runtime and Matlab Runtime(R2019b Update5).
 FROM microsoft/dotnet:runtime
 
-# Matlab needs GStreamer to execute audioread function.
 RUN apt-get update && \
-    apt-get install -y curl wget xorg zip unzip bzip2 && \
-    apt-get install -y gstreamer1.0-plugins-*
+  apt-get install -y wget unzip
 
-# Install MatLab runtime.
+ARG zip=MATLAB_Runtime_R2019b_Update_5_glnxa64.zip
+
+# Install MatLab runtime into /usr/local/MATLAB/MATLAB_Runtime/v97
 RUN mkdir /mcr-install && cd /mcr-install &&  \
-    wget -nv http://ssd.mathworks.com/supportfiles/downloads/R2016b/deployment_files/R2016b/installers/glnxa64/MCR_R2016b_glnxa64_installer.zip  && \
-    unzip MCR_R2016b_glnxa64_installer.zip && \
-    ./install -mode silent -agreeToLicense yes && \
-    rm -Rf /mcr-install
+  wget -O ${zip} -cnv https://ssd.mathworks.com/supportfiles/downloads/R2019b/Release/5/deployment_files/installer/complete/glnxa64/MATLAB_Runtime_R2019b_Update_5_glnxa64.zip  && \
+  unzip -q ${zip} && \
+  ./install -mode silent -agreeToLicense yes && \
+  rm -rf /mcr-install
 
-# 1. In case you want to install matlab from the already downloaded zip archive, uncomment following lines.
-# 2. Comment 'install matlab from the web' lines above.
+# Note 1: if you want to install matlab from the already downloaded zip archive,
+# uncomment the lines below and comment lines with RUN command above.
 #
-# NOTE: MCR_R2016b_glnxa64_installer.zip have to be located in the save directory as Dockerfile.
+# Note 2: MATLAB_Runtime_R2019b_Update_5_glnxa64.zip have to be located in the
+# same directory as Dockerfile.
 #
 #RUN mkdir /mcr-install
-#ADD ./MCR_R2016b_glnxa64_installer.zip /mcr-install/MCR_R2016b_glnxa64_installer.zip
+#ADD $zip /mcr-install/${zip}
 #RUN cd /mcr-install &&  \
-#    unzip MCR_R2016b_glnxa64_installer.zip && \
+#    unzip -q ${zip} && \
 #    ./install -mode silent -agreeToLicense yes && \
-#    rm -Rf /mcr-install
+#    rm -rf /mcr-install
